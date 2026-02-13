@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Valentine's Day!</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #ffc3e1 0%, #ff9cc7 50%, #ff6b9d 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .countdown-section {
+      margin-bottom: 30px;
+      padding: 20px;
+      background: linear-gradient(135deg, #ffe6f0, #fff0f6);
+      border-radius: 15px;
+      border: 2px solid #ffc3e1;
+    }
+
+    .countdown-title {
+      font-size: 1.1em;
+      color: #e91e63;
+      font-weight: bold;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .countdown-timer {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    .time-unit {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(233, 30, 99, 0.2);
+      min-width: 70px;
+    }
+
+    .time-number {
+      display: block;
+      font-size: 2em;
+      font-weight: bold;
+      color: #e91e63;
+      line-height: 1;
+    }
+
+    .time-label {
+      display: block;
+      font-size: 0.8em;
+      color: #666;
+      margin-top: 5px;
+      text-transform: uppercase;
+    }
+
+    .message {
+      font-size: 0.95em;
+      color: #d81b60;
+      font-style: italic;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    h2 {
+      color: #e91e63;
+      font-size: 2em;
+      margin-bottom: 30px;
+      animation: fadeIn 1s ease-in;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    input {
+      flex: 1;
+      min-width: 200px;
+      padding: 15px;
+      border: 2px solid #ffc3e1;
+      border-radius: 10px;
+      font-size: 1em;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    input:focus {
+      border-color: #e91e63;
+    }
+
+    button {
+      display: none;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      position: relative;
+      animation: modalSlideIn 0.5s ease-out;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 2em;
+      color: #e91e63;
+      cursor: pointer;
+      background: none;
+      border: none;
+      display: block;
+      width: auto;
+      padding: 0;
+      line-height: 1;
+      transition: transform 0.2s;
+    }
+
+    .close-btn:hover {
+      transform: scale(1.2);
+    }
+
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: scale(0.8) translateY(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .valentine-card {
+      animation: slideIn 0.5s ease-out;
+    }
+
+    .valentine-card h3 {
+      color: #e91e63;
+      font-size: 1.8em;
+      margin-bottom: 20px;
+    }
+
+    .valentine-card p {
+      font-size: 1.2em;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .flowers-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .flower {
+      animation: grow 0.6s ease-out forwards;
+      opacity: 0;
+    }
+
+    .flower:nth-child(1) { animation-delay: 0.1s; }
+    .flower:nth-child(2) { animation-delay: 0.2s; }
+    .flower:nth-child(3) { animation-delay: 0.3s; }
+    .flower:nth-child(4) { animation-delay: 0.4s; }
+    .flower:nth-child(5) { animation-delay: 0.5s; }
+
+    .hearts-floating {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      font-size: 2em;
+      margin-top: 20px;
+    }
+
+    .heart {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .heart:nth-child(1) { animation-delay: 0s; }
+    .heart:nth-child(2) { animation-delay: 0.5s; }
+    .heart:nth-child(3) { animation-delay: 1s; }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes grow {
+      from {
+        opacity: 0;
+        transform: scale(0) rotate(-180deg);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+      }
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-20px);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 30px 20px;
+      }
+
+      h2 {
+        font-size: 1.5em;
+      }
+
+      .valentine-card h3 {
+        font-size: 1.4em;
+      }
+
+      input {
+        min-width: 150px;
+      }
+
+      button {
+        width: 100%;
+      }
+
+      .countdown-section {
+        padding: 15px;
+      }
+
+      .countdown-title {
+        font-size: 0.9em;
+      }
+
+      .countdown-timer {
+        gap: 8px;
+      }
+
+      .time-unit {
+        padding: 10px;
+        min-width: 60px;
+      }
+
+      .time-number {
+        font-size: 1.5em;
+      }
+
+      .time-label {
+        font-size: 0.7em;
+      }
+
+      .message {
+        font-size: 0.85em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>💕 Happy Valentine's Day! 💕</h2>
+    <div class="input-group">
+      <input id="name" type="text" placeholder="Enter her name and press Enter...">
+    </div>
+  </div>
+
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <button class="close-btn" onclick="closeModal()">×</button>
+      <div id="valentineBox"></div>
+    </div>
+  </div>
+
+  <script>
+    let countdownInterval = null;
+
+    // Countdown Timer
+    function updateCountdown() {
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      const currentMonth = now.getMonth(); // 0-indexed (February = 1)
+      
+      // Valentine's Day this month (February 14)
+      let valentinesDay = new Date(currentYear, 1, 14, 0, 0, 0); // Month 1 = February
+      
+      // If we're past Valentine's Day this year, count to next year
+      if (now > valentinesDay) {
+        valentinesDay = new Date(currentYear + 1, 1, 14, 0, 0, 0);
+      }
+      
+      const timeRemaining = valentinesDay - now;
+      
+      const daysEl = document.getElementById('days');
+      const hoursEl = document.getElementById('hours');
+      const minutesEl = document.getElementById('minutes');
+      const secondsEl = document.getElementById('seconds');
+      const messageEl = document.querySelector('.message');
+      
+      // Only update if elements exist
+      if (daysEl && hoursEl && minutesEl && secondsEl) {
+        if (timeRemaining > 0) {
+          const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+          
+          daysEl.textContent = days;
+          hoursEl.textContent = hours;
+          minutesEl.textContent = minutes;
+          secondsEl.textContent = seconds;
+        } else {
+          // It's Valentine's Day!
+          daysEl.textContent = '0';
+          hoursEl.textContent = '0';
+          minutesEl.textContent = '0';
+          secondsEl.textContent = '0';
+          if (messageEl) {
+            messageEl.textContent = "HAPPY VALENTINE'S DAY! 💖";
+          }
+        }
+      }
+    }
+
+    function createValentine() {
+      let name = document.getElementById("name").value;
+      
+      if (!name.trim()) {
+        alert("Please enter a name! 💝");
+        return;
+      }
+
+      let valentineBox = document.getElementById("valentineBox");
+      valentineBox.innerHTML = `
+        <div class="valentine-card">
+          <div class="countdown-section">
+            <div class="countdown-title">Valentine's Day Countdown</div>
+            <div class="countdown-timer" id="countdown">
+              <div class="time-unit">
+                <span class="time-number" id="days">0</span>
+                <span class="time-label">Days</span>
+              </div>
+              <div class="time-unit">
+                <span class="time-number" id="hours">0</span>
+                <span class="time-label">Hours</span>
+              </div>
+              <div class="time-unit">
+                <span class="time-number" id="minutes">0</span>
+                <span class="time-label">Minutes</span>
+              </div>
+              <div class="time-unit">
+                <span class="time-number" id="seconds">0</span>
+                <span class="time-label">Seconds</span>
+              </div>
+            </div>
+            <div class="message">
+              EMMANUEL BETT WISHING YOU VALENTINE'S DAY IN ADVANCE
+            </div>
+          </div>
+
+          <h3>Happy Valentine's Day ${name}! 💖</h3>
+          <p>🌹 A bouquet of flowers just for you! 🌹</p>
+          <div class="flowers-container">
+            ${createFlowerSVG('#ff69b4')}
+            ${createFlowerSVG('#ff1493')}
+            ${createFlowerSVG('#ff69b4')}
+            ${createFlowerSVG('#ff1493')}
+            ${createFlowerSVG('#ff69b4')}
+          </div>
+          <p style="font-style: italic; color: #e91e63; font-size: 1.1em;">
+            You make every day feel special! ✨
+          </p>
+          <div class="hearts-floating">
+            <span class="heart">💕</span>
+            <span class="heart">💗</span>
+            <span class="heart">💕</span>
+          </div>
+        </div>
+      `;
+
+      // Show modal
+      document.getElementById("modal").classList.add("show");
+      
+      // Start countdown in modal
+      updateCountdown();
+      
+      // Clear any existing interval
+      if (countdownInterval) {
+        clearInterval(countdownInterval);
+      }
+      
+      // Update countdown every second
+      countdownInterval = setInterval(updateCountdown, 1000);
+    }
+
+    function closeModal() {
+      document.getElementById("modal").classList.remove("show");
+      
+      // Stop countdown when modal closes
+      if (countdownInterval) {
+        clearInterval(countdownInterval);
+        countdownInterval = null;
+      }
+    }
+
+    function createFlowerSVG(color) {
+      return `
+        <svg class="flower" width="60" height="60" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <!-- Petals -->
+          <circle cx="50" cy="30" r="15" fill="${color}" opacity="0.8"/>
+          <circle cx="70" cy="50" r="15" fill="${color}" opacity="0.8"/>
+          <circle cx="50" cy="70" r="15" fill="${color}" opacity="0.8"/>
+          <circle cx="30" cy="50" r="15" fill="${color}" opacity="0.8"/>
+          <!-- Center -->
+          <circle cx="50" cy="50" r="12" fill="#ffd700"/>
+          <!-- Stem -->
+          <line x1="50" y1="62" x2="50" y2="90" stroke="#2d7a2d" stroke-width="3"/>
+          <!-- Leaf -->
+          <ellipse cx="42" cy="75" rx="8" ry="4" fill="#4caf50" transform="rotate(-30 42 75)"/>
+        </svg>
+      `;
+    }
+
+    // Enter key to create valentine
+    document.getElementById("name").addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        createValentine();
+      }
+    });
+
+    // Close modal when clicking outside
+    document.getElementById("modal").addEventListener("click", function(event) {
+      if (event.target === this) {
+        closeModal();
+      }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener("keydown", function(event) {
+      if (event.key === "Escape") {
+        closeModal();
+      }
+    });
+  </script>
+</body>
+</html>
